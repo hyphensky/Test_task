@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Главная страница</title>
+	<meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel='stylesheet' href='styles.css' type='text/css'>
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+	<script type="text/javascript" 
+		src="https://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" 
+		src="https://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+</head>
+<body>
+<div class='products'>
+<table class='products_table' border="1" cellpadding="10" cellspacing="0" width="80%">
+<tr>
+	<th>ID</th>
+    <th>PRODUCT_ID</th>
+	<th>PRODUCT_NAME</th>
+	<th>PRODUCT_PRICE</th>
+	<th>PRODUCT_ARTICLE</th>
+    <th>PRODUCT_QUANTITY</th>
+    <th>DATE_CREATE</th>
+    <th></th>
+</tr>
+<?php if ($result): ?>
+    <?php foreach($result as $item): ?> 
+    <tr id=row<?=$item['ID']?>> 
+    <td><?= html($item['ID']) ?></td>
+    <td><?= html($item['PRODUCT_ID']) ?></td>
+    <td><?= html($item['PRODUCT_NAME']) ?></td>
+    <td><?= html($item['PRODUCT_PRICE']) ?></td>
+    <td><?= html($item['PRODUCT_ARTICLE']) ?></td>
+    <td><input type="number" id="product-quantity<?=$item['ID']?>" name="quantity" value=<?=html($item['PRODUCT_QUANTITY'])?>></td>
+    <td><?= html($item['DATE_CREATE']) ?></td>
+    <td><button class="hide-btn" id=btn<?=$item['ID']?> >Скрыть</button></td>
+    </tr> 
+    <script>
+    $('#btn<?=$item['ID']?>').click(function() {     
+        $('#row<?=$item['ID']?>').hide()
+        $.get('sethidden.php?id=<?=$item['ID']?>')
+    })
+    $('#product-quantity<?=$item['ID']?>').change(function() {
+       $.post('setquantity.php', {id : <?=$item['ID']?>, quantity : $('#product-quantity<?=$item['ID']?>').val() })
+    })
+    </script>
+    <?php endforeach; ?>
+<?php endif; ?>	
+</div>
+
+</body>
+</html>
